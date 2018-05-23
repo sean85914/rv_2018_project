@@ -1,7 +1,7 @@
 clear all
 clc
 %% Constant definition
-% Configuration space sice
+% Configuration space size
 X_DIM = 20;
 Y_DIM = 10;
 % Initial point
@@ -47,15 +47,16 @@ plot(q_goal(1), q_goal(2), '*g')
 
 %% RRT Process
 tic
+% q_list: node list, 1:2 -> position, 3: parent
 % q_init: origin position
 % q_goal: goal position
 % q_rand: position generated randomly in configuration space
-% q_near:  
+% q_near: new q generated after obstacle checker
 q_near = q_init;
 % q list
 q_size = 1;
 q_list(1, 1:2) = q_init;
-q_list(1, 3) = 1;
+q_list(1, 3) = 1; % First node, with parent index 1
 index = 1;
 while (norm(q_goal - q_near) > epsilon)
     % Generate random position in configuration space
@@ -63,7 +64,7 @@ while (norm(q_goal - q_near) > epsilon)
     % Plot q_rand, color: red
     %plot(q_rand(1), q_rand(2), '*r')
     [q_near, index] = near(q_list, q_rand, delta_d);
-    % check bound
+    % check bound, make sure node won't exceed the configuration space
     if(q_near(1) > X_DIM) 
         q_near(1) = X_DIM;
     end
@@ -79,20 +80,30 @@ while (norm(q_goal - q_near) > epsilon)
     %plot([q_list(index, 1), q_rand(1)], [q_list(index, 2), q_rand(2)], '--k')
     if(is_hit_constrain(q_list(index, 1:2), q_near, obs_size, obs_list) == 0) % Does not hit the constrain
         % q_size += 1
-        q_size =q_size + 1;
+        q_size = q_size + 1;
         % Append new point to q_list
         q_list(q_size, 1:2) = q_near;
-        q_list(q_size, 3) = index;
-        % Update graph
+        q_list(q_size, 3) = index; % Parent node index
+        % Update plot
         line([q_list(index, 1), q_near(1)], [q_list(index, 2), q_near(2)]);
         plot(q_near(1),q_near(2), '*b')
         drawnow
     end
     
 end
-%% Find path
+%% Find path via inverse tracking
+% Process:
+% child <- q_size
+% parent <- q_list(q_size,3)
+% while (child != 1):
+%   plot line between child node and parent node
+%   waypoint_size += 1
+%   waypoint_index_list.append(parent)
+%   temp = parent
+%   parent = q_list(temp, 3)
+%   child = parent
 waypoint_size = 1;
-waypoint_index_list = [q_size];
+waypoint_index_list = [q_size]; % Last node as first element
 child_index = q_size;
 parent_index = q_list(q_size,3);
 while(child_index ~= 1)

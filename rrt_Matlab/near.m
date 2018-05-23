@@ -1,4 +1,8 @@
 function [ q_near, index] = near( q_list, q_rand, delta_d )
+    % Find the nearest node w.r.t q_rand in q_list and return the index and
+    % q_near, which is the node distance delta_d from nearest node toe
+    % q_rand
+    
     % Set huge minimal and index
     min = 1e6;
     index = 0;
