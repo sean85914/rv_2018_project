@@ -1,28 +1,34 @@
+// Left  motor C1 -> Pin2
+// Right motor C1 -> Pin3
+// Left  motor C2 -> Pin10
+// Right motor C2 -> Pin!1
+// Don't forget to power encoders on!
 #include "math.h"
-// Structure Parameters, unit: meter
+// Structure Parameters (unit: meter)
 #define WIDTH 0.291
-#define PPR 990
 #define RADIUS 0.125
+// Encoder Parameters
+#define PPR 990
 // Pin Parameters
 int encoderL = 10;
 int encoderR = 11;
-// Distance motor traveled per tick, unit: meter
+// Distance motor traveled per tick (unit: meter)
 float dis_per_tick = 2* PI * RADIUS / PPR;
 float disL;
 float disR;
 // Encoder Parameters
-volatile int encoderLNow;
-volatile int encoderRNow;
+volatile int encoderLNow = 0;
+volatile int encoderRNow = 0;
 int encoderLPrior = 0;
 int encoderRPrior = 0;
-// Vehicle Speed Parameters, unit: m/s
+// Vehicle Speed Parameters (unit: m/s)
 double v_x;
 double v_y;
 double omega;
-// Motor Speed Parameters, unit: m/s
+// Motor Speed Parameters (unit: m/s)
 double v_L;
 double v_R;
-// Location Parameters, unit: m and rad
+// Location Parameters (unit: m and rad)
 double x = 0;
 double y = 0;
 double theta = 0;
@@ -32,12 +38,9 @@ unsigned long dt = 100; // Unit: ms, 10Hz
 unsigned long now;
 unsigned long _time;
 void setup() {
-  // Initial encoder parameters
-  encoderLNow = 0;
-  encoderRNow = 0;
   // Declare interrupt pin and function
-  attachInterrupt(0, EncoderL, RISING); // Pin 2, left
-  attachInterrupt(1, EncoderR, RISING); // Pin 3, right
+  attachInterrupt(0, EncoderL, RISING); // Pin 2, left motor, call EncoderL when rising
+  attachInterrupt(1, EncoderR, RISING); // Pin 3, right motor, call EncoderR when rising
   // Set pin mode
   pinMode(encoderL, INPUT); // Pin 10
   pinMode(encoderR, INPUT); // Pin 11
@@ -64,15 +67,15 @@ void loop() {
     y += (disR + disL) / 2 * sin(theta + dtheta / 2.);
     theta += dtheta;
     // Set theta in range [0, 2*pi)
-    if(theta >= 2*PI ) theta -= 2*PI;
-    if(theta <0 )      theta += 2*PI;
-    // Update all paramters
+    if(theta >= 2 * PI ) theta -= 2 * PI;
+    if(theta < 0 )       theta += 2 * PI;
+    // Update all parameters
     encoderLPrior = encoderLNow;
     encoderRPrior = encoderRNow;
     now = millis();
   }
   // Display Information
-  // x y theta v_L v_R v_x v_y omega
+  // Format: x y theta v_L v_R v_x v_y omega
   Serial.print("x: ");Serial.print(x);Serial.print("\ty: ");Serial.print(y);Serial.print("\ttheta: ");Serial.print(theta);Serial.print("\tv_L: ");Serial.print(v_L);
   Serial.print("\tv_R: ");Serial.print(v_R);Serial.print("\tv_x: ");Serial.print(v_x);Serial.print("\tv_y: ");Serial.print(v_y);Serial.print("\tomega: ");Serial.println(omega);
 }
