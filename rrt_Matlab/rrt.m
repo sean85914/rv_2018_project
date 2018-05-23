@@ -4,6 +4,8 @@ clc
 % Configuration space size
 X_DIM = 20;
 Y_DIM = 10;
+% Vehicle size
+l = 0.48;
 % Initial point
 q_init = [0, 0];
 % Goal point
@@ -78,7 +80,7 @@ while (norm(q_goal - q_near) > epsilon)
         q_near(2) = 0;
     end
     %plot([q_list(index, 1), q_rand(1)], [q_list(index, 2), q_rand(2)], '--k')
-    if(is_hit_constrain(q_list(index, 1:2), q_near, obs_size, obs_list) == 0) % Does not hit the constrain
+    if(is_hit_constrain(q_list(index, 1:2), q_near, l+0.2, obs_size, obs_list) == 0) % Does not hit the constrain
         % q_size += 1
         q_size = q_size + 1;
         % Append new point to q_list
@@ -108,6 +110,12 @@ child_index = q_size;
 parent_index = q_list(q_size,3);
 while(child_index ~= 1)
     plot([q_list(child_index, 1), q_list(parent_index, 1)],[q_list(child_index, 2), q_list(parent_index, 2)], 'r')
+    theta = atan2(q_list(child_index, 2) - q_list(parent_index, 2), q_list(child_index, 1) - q_list(parent_index, 1));
+    % Plot vehicle
+    plot([l/2*cos(theta)+l/2*sin(theta)+q_list(parent_index, 1), l/2*cos(theta)-l/2*sin(theta)+q_list(parent_index, 1)],[l/2*sin(theta)-l/2*cos(theta)+q_list(parent_index, 2), l/2*sin(theta)+l/2*cos(theta)+q_list(parent_index, 2)], 'r')
+    plot([-l/2*cos(theta)+l/2*sin(theta)+q_list(parent_index, 1), -l/2*cos(theta)-l/2*sin(theta)+q_list(parent_index, 1)],[-l/2*sin(theta)-l/2*cos(theta)+q_list(parent_index, 2), -l/2*sin(theta)+l/2*cos(theta)+q_list(parent_index, 2)], 'r')
+    plot([l/2*cos(theta)-l/2*sin(theta)+q_list(parent_index, 1), -l/2*cos(theta)-l/2*sin(theta)+q_list(parent_index, 1)],[l/2*sin(theta)+l/2*cos(theta)+q_list(parent_index, 2), -l/2*sin(theta)+l/2*cos(theta)+q_list(parent_index, 2)], 'r')
+    plot([l/2*cos(theta)+l/2*sin(theta)+q_list(parent_index, 1), -l/2*cos(theta)+l/2*sin(theta)+q_list(parent_index, 1)],[l/2*sin(theta)-l/2*cos(theta)+q_list(parent_index, 2), -l/2*sin(theta)-l/2*cos(theta)+q_list(parent_index, 2)], 'r')
     waypoint_size = waypoint_size + 1;
     waypoint_index_list(waypoint_size) = parent_index;
     temp = parent_index;
