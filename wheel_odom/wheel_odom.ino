@@ -1,0 +1,102 @@
+#include "math.h"
+// Structure Parameters, unit: meter
+#define WIDTH 0.291
+#define PPR 990
+#define RADIUS 0.125
+// Pin Parameters
+int encoderL = 10;
+int encoderR = 11;
+// Distance motor traveled per tick, unit: meter
+float dis_per_tick = 2* PI * RADIUS / PPR;
+float disL;
+float disR;
+// Encoder Parameters
+volatile int encoderLNow;
+volatile int encoderRNow;
+int encoderLPrior = 0;
+int encoderRPrior = 0;
+// Vehicle Speed Parameters, unit: m/s
+double v_x;
+double v_y;
+double omega;
+// Motor Speed Parameters, unit: m/s
+double v_L;
+double v_R;
+// Location Parameters, unit: m and rad
+double x = 0;
+double y = 0;
+double theta = 0;
+double dtheta;
+// Time Parameters
+unsigned long dt = 100; // Unit: ms, 10Hz
+unsigned long now;
+unsigned long _time;
+void setup() {
+  // Initial encoder parameters
+  encoderLNow = 0;
+  encoderRNow = 0;
+  // Declare interrupt pin and function
+  attachInterrupt(0, EncoderL, RISING); // Pin 2, left
+  attachInterrupt(1, EncoderR, RISING); // Pin 3, right
+  // Set pin mode
+  pinMode(encoderL, INPUT); // Pin 10
+  pinMode(encoderR, INPUT); // Pin 11
+  // Start Serial for data transmit 
+  Serial.begin(115200);
+  // Update time 
+  now = millis();
+}
+
+void loop() {
+    //Serial.print("Encoder L: "); Serial.print(encoderLNow); Serial.print("\t; Encoder R: "); Serial.println(encoderRNow);
+  if(millis() - now >= dt)
+  {
+    _time = millis() - now; // Unit: ms
+    disL = dis_per_tick * (encoderLNow - encoderLPrior);
+    disR = dis_per_tick * (encoderRNow - encoderRPrior);
+    v_L = disL / _time * 1000;
+    v_R = disR / _time * 1000;
+    dtheta = (disR - disL) / WIDTH;
+    omega = dtheta / _time * 1000;
+    v_x = (disR + disL) / 2 * cos(theta + dtheta / 2.) / _time * 1000;
+    v_y = (disR + disL) / 2 * sin(theta + dtheta / 2.) / _time * 1000;
+    x += (disR + disL) / 2 * cos(theta + dtheta / 2.);
+    y += (disR + disL) / 2 * sin(theta + dtheta / 2.);
+    theta += dtheta;
+    // Set theta in range [0, 2*pi)
+    if(theta >= 2*PI ) theta -= 2*PI;
+    if(theta <0 )      theta += 2*PI;
+    // Update all paramters
+    encoderLPrior = encoderLNow;
+    encoderRPrior = encoderRNow;
+    now = millis();
+  }
+  // Display Information
+  // x y theta v_L v_R v_x v_y omega
+  Serial.print("x: ");Serial.print(x);Serial.print("\ty: ");Serial.print(y);Serial.print("\ttheta: ");Serial.print(theta);Serial.print("\tv_L: ");Serial.print(v_L);
+  Serial.print("\tv_R: ");Serial.print(v_R);Serial.print("\tv_x: ");Serial.print(v_x);Serial.print("\tv_y: ");Serial.print(v_y);Serial.print("\tomega: ");Serial.println(omega);
+}
+
+void EncoderL()
+{
+  if (digitalRead(encoderL) == LOW) // Forward
+  {
+    encoderLNow += 1;
+  }
+  else // Backward
+  {
+    encoderLNow -= 1;
+  }
+}
+void EncoderR()
+{
+  if (digitalRead(encoderR) == HIGH) // Forward
+  {
+    encoderRNow += 1;
+  }
+  else // Backward
+  {
+    encoderRNow -= 1;
+  }
+}
+
