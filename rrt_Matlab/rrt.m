@@ -13,23 +13,24 @@ q_goal = [20, 10];
 % Walk distance
 delta_d = .5;
 % Distance tolerance
-epsilon = 1;
+epsilon = .1;
 % Size of obstacle list
 obs_size = 7;
 % Obstacle length size list, 2 size
 obs_size_list = [ 0.5, 2];
-
+% Standard deviation for normal distribution
+sigma = 10;
 %% Obstacle list
 % Model obstacle as a square
 % format: [x, y, l]
 %          x. y: center
 %          l: side length 
-obs_list = [ 8,   3, obs_size_list(2);
-             6,   7, obs_size_list(2);
-            11,   5, obs_size_list(1);
+obs_list = [ 3,   5, obs_size_list(2);
+             6,   7, obs_size_list(1);
+            11,   3, obs_size_list(2);
             10,   6, obs_size_list(1);
             14, 4.5, obs_size_list(1);
-            16,   8, obs_size_list(1);
+            16,   8, obs_size_list(2);
             18, 6.5, obs_size_list(1)];
         
 %% Display
@@ -62,7 +63,10 @@ q_list(1, 3) = 1; % First node, with parent index 1
 index = 1;
 while (norm(q_goal - q_near) > epsilon)
     % Generate random position in configuration space
-    q_rand = [rand* X_DIM, rand * Y_DIM];
+    % Using uniform distribution
+    %q_rand = [rand* X_DIM, rand * Y_DIM];
+    % Using normal distribution with goal as center
+    q_rand = [normrnd(X_DIM, sigma), normrnd(Y_DIM, sigma)];
     % Plot q_rand, color: red
     %plot(q_rand(1), q_rand(2), '*r')
     [q_near, index] = near(q_list, q_rand, delta_d);
@@ -80,6 +84,7 @@ while (norm(q_goal - q_near) > epsilon)
         q_near(2) = 0;
     end
     %plot([q_list(index, 1), q_rand(1)], [q_list(index, 2), q_rand(2)], '--k')
+    % Add 0.2 for prevent collision in real world
     if(is_hit_constrain(q_list(index, 1:2), q_near, l+0.2, obs_size, obs_list) == 0) % Does not hit the constrain
         % q_size += 1
         q_size = q_size + 1;
@@ -94,7 +99,7 @@ while (norm(q_goal - q_near) > epsilon)
     
 end
 %% Find path via inverse tracking
-% Process:
+% Process pseudocode: 
 % child <- q_size
 % parent <- q_list(q_size,3)
 % while (child != 1):
