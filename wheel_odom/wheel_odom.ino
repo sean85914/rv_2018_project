@@ -7,6 +7,8 @@
 // Structure Parameters (unit: meter)
 #define WIDTH 0.291
 #define RADIUS 0.125
+// For debug
+#define DEBUG 0
 // Encoder Parameters
 #define PPR 990
 // Pin Parameters
@@ -34,7 +36,7 @@ double y = 0;
 double theta = 0;
 double dtheta;
 // Time Parameters
-unsigned long dt = 100; // Unit: ms, 10Hz
+unsigned long dt = 200; // Unit: ms, 10Hz
 unsigned long now;
 unsigned long _time;
 void setup() {
@@ -45,7 +47,7 @@ void setup() {
   pinMode(encoderL, INPUT); // Pin 10
   pinMode(encoderR, INPUT); // Pin 11
   // Start Serial for data transmit 
-  Serial.begin(115200);
+  Serial.begin(9600);
   // Update time 
   now = millis();
 }
@@ -76,30 +78,38 @@ void loop() {
   }
   // Display Information
   // Format: x y theta v_L v_R v_x v_y omega
-  Serial.print("x: ");Serial.print(x);Serial.print("\ty: ");Serial.print(y);Serial.print("\ttheta: ");Serial.print(theta);Serial.print("\tv_L: ");Serial.print(v_L);
-  Serial.print("\tv_R: ");Serial.print(v_R);Serial.print("\tv_x: ");Serial.print(v_x);Serial.print("\tv_y: ");Serial.print(v_y);Serial.print("\tomega: ");Serial.println(omega);
+  display();
 }
 
 void EncoderL()
 {
   if (digitalRead(encoderL) == LOW) // Forward
   {
-    encoderLNow += 1;
+    encoderLNow += 1; 
+    if(DEBUG) Serial.println("Left forward");
   }
   else // Backward
   {
-    encoderLNow -= 1;
+    encoderLNow -= 1; 
+    if(DEBUG) Serial.println("Left backward");
   }
 }
 void EncoderR()
 {
   if (digitalRead(encoderR) == HIGH) // Forward
   {
-    encoderRNow += 1;
+    encoderRNow += 1; 
+    if(DEBUG) Serial.println("right forward");
   }
   else // Backward
   {
-    encoderRNow -= 1;
+    encoderRNow -= 1; 
+    if(DEBUG) Serial.println("right backward");
   }
+}
+void display()
+{
+  Serial.print("x: ");Serial.print(x);Serial.print("\ty: ");Serial.print(y);Serial.print("\ttheta: ");Serial.print(theta);Serial.print("\tv_L: ");Serial.print(v_L);
+  Serial.print("\tv_R: ");Serial.print(v_R);Serial.print("\tv_x: ");Serial.print(v_x);Serial.print("\tv_y: ");Serial.print(v_y);Serial.print("\tomega: ");Serial.println(omega);
 }
 
