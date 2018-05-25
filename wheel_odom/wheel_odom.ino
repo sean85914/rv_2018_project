@@ -109,7 +109,8 @@ void EncoderR()
 }
 void display()
 {
-  Serial.print("x: ");Serial.print(x);Serial.print("\ty: ");Serial.print(y);Serial.print("\ttheta: ");Serial.print(theta);Serial.print("\tv_L: ");Serial.print(v_L);
-  Serial.print("\tv_R: ");Serial.print(v_R);Serial.print("\tv_x: ");Serial.print(v_x);Serial.print("\tv_y: ");Serial.print(v_y);Serial.print("\tomega: ");Serial.println(omega);
+  // Format: x y theta v_L v_R v_x v_y omega
+  Serial.print(x);Serial.print(" ");Serial.print(y);Serial.print(" ");Serial.print(theta);Serial.print("  ");Serial.print(v_L);
+  Serial.print(" ");Serial.print(v_R);Serial.print(" ");Serial.print(v_x);Serial.print(" ");Serial.print(v_y);Serial.print(" ");Serial.println(omega);
 }
 
