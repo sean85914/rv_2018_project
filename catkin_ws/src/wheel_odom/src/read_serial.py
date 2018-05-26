@@ -29,7 +29,7 @@ def read_data(event):
 				 	rospy.Time.now(),
 				 	'odom',
 				 	'map')
-			print("Broadcast tf")
+			print("x: %s, y: %s, theta: %s", (x, y, theta))
 		except ValueError:
 			pass
 
