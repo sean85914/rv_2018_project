@@ -1,9 +1,6 @@
 int encoderL = 10;
 int encoderR = 11;
 
-unsigned long dt = 50;
-unsigned long now;
-
 volatile int encoderLNow = 0;
 volatile int encoderRNow = 0;
 
@@ -13,19 +10,14 @@ void setup(){
   pinMode(encoderL, INPUT);
   pinMode(encoderR, INPUT);
   Serial.begin(9600);
-  now = millis();
 }
 
 void loop(){
- if(millis() - now >= dt) 
- {
   Serial.print(encoderLNow);
   Serial.print(" ");
   Serial.print(encoderRNow);
   Serial.print(" ");
   Serial.println(millis());
-  now = millis();
- }
 }
 
 void EncoderL(){
