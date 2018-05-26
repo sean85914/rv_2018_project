@@ -29,13 +29,13 @@ def read_data(event):
 				 	rospy.Time.now(),
 				 	'odom',
 				 	'map')
-			print("x: %s, y: %s, theta: %s", (x, y, theta))
+			print("x: ", x,", y: " , y, ", theta: ", theta)
 		except ValueError:
 			pass
 
 if __name__ == '__main__':
 	rospy.init_node('whel_odom_node', anonymous = False)
-	port = rospy.get_param("~port", "/dev/ttyUSB0") # default port: /dev/ttyUSB0
+	port = rospy.get_param("~port", "/dev/ttyACM0") # default port: /dev/ttyUSB0
 	ard = serial.Serial(port, 9600)
 	rospy.Timer(rospy.Duration.from_sec(0.1), read_data)
 	rospy.spin()

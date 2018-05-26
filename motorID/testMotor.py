@@ -3,13 +3,13 @@ import time
 import serial
 
 ard = serial.Serial('/dev/ttyACM0', 9600)
-f = open("const_pwm_100.txt", 'w')
+f = open("const_pwm_150.txt", 'w')
 mh = Adafruit_MotorHAT(addr = 0x60)
 left = mh.getMotor(1)
 right = mh.getMotor(2)
 
-left.setSpeed(100)
-right.setSpeed(100)
+left.setSpeed(150)
+right.setSpeed(150)
 try:
 	while(1):
 		left.run(1)

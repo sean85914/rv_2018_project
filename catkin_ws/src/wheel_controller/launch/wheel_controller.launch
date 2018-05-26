@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="wheel_controller" type="wheel_controller_node.py" name="wheel_controller_node" output="screen" clear_params="true" required="true"/>
+</launch>

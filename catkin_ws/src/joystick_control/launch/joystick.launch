@@ -1,0 +1,5 @@
+<launch>
+	<include file="$(find joy_mapper_sean)/launch/joy_mapper.launch"/>
+	<include file="$(find wheel_controller)/launch/wheel_controller.launch"/>
+	<include file="$(find wheel_odom)/launch/wheel_odom.launch"/>
+</launch>

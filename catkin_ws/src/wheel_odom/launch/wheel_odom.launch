@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="wheel_odom" type="read_serial.py" name="wheel_odom_node" output="screen" clear_params="true" required="true"/>
+
+</launch>
