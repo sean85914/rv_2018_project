@@ -8,7 +8,7 @@
 #define WIDTH 0.291
 #define RADIUS 0.125
 // For debug
-#define DEBUG 0
+#define DEBUG 1
 // Encoder Parameters
 #define PPR 990
 // Pin Parameters
@@ -109,8 +109,9 @@ void EncoderR()
 }
 void display()
 {
-  // Format: x y theta v_L v_R v_x v_y omega
-  Serial.print(x);Serial.print(" ");Serial.print(y);Serial.print(" ");Serial.print(theta);Serial.print("  ");Serial.print(v_L);
-  Serial.print(" ");Serial.print(v_R);Serial.print(" ");Serial.print(v_x);Serial.print(" ");Serial.print(v_y);Serial.print(" ");Serial.println(omega);
+  if(!DEBUG)  {
+    // Format: x y theta v_L v_R v_x v_y omega
+    Serial.print(x);Serial.print(" ");Serial.print(y);Serial.print(" ");Serial.print(theta);Serial.print(" ");Serial.print(v_L);
+    Serial.print(" ");Serial.print(v_R);Serial.print(" ");Serial.print(v_x);Serial.print(" ");Serial.print(v_y);Serial.print(" ");Serial.println(omega);
+  }
 }
-
