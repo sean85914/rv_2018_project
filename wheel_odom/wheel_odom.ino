@@ -8,7 +8,7 @@
 #define WIDTH 0.291
 #define RADIUS 0.125
 // For debug
-#define DEBUG 1
+#define DEBUG 0
 // Encoder Parameters
 #define PPR 990
 // Pin Parameters
