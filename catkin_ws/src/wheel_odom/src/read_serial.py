@@ -2,6 +2,14 @@
 import rospy
 import tf
 import serial
+global x, y, theta, v_L, v_R, v_x, v_y
+x = 0
+y = 0
+theta = 0
+v_L = 0
+v_R = 0
+v_x = 0
+v_y = 0
 
 br = tf.TransformBroadcaster()
 
@@ -12,10 +20,15 @@ def read_data(event):
 		str_ = ard.readline()
 	split_str = str_.split(' ')
 	if len(split_str) != 8:
-		print("Length of list wrong!")
-		pass
+		global x, y, theta
+		br.sendTransform((x, y, 0),
+				 tf.transformations.quaternion_from_euler(0, 0, theta),
+				 rospy.Time.now(),
+				 'odom',
+				 'map')
 	else:
 		try:
+			global x, y, theta, v_L, v_R, v_x, v_y, omega
 			x 	= float(split_str[0])
 			y 	= float(split_str[1])
 			theta   = float(split_str[2])
