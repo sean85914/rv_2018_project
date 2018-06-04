@@ -3,6 +3,7 @@ import rospy
 import tf
 import serial
 from nav_msgs.msg import Odometry
+from geometry_msgs.msg import Point
 
 global x, y, theta, v_L, v_R, v_x, v_y, omega
 
@@ -46,16 +47,19 @@ def read_data(event):
 			br.sendTransform((x, y, 0),
 				 	tf.transformations.quaternion_from_euler(0, 0, theta),
 				 	rospy.Time.now(),
-				 	'odom',
-				 	'map')
+				 	'base_link',
+				 	'odom')
 			odom = Odometry()
 			odom.header.seq = seq
 			odom.header.stamp = rospy.Time.now()
-			odom.header.frame_id = "map"
-			odom.child_frame_id = "odom"
-			odom.pose.pose.position.x = x
-			odom.pose.pose.position.y = y
-			odom.pose.pose.orientation = tf.transformations.quaternion_from_euler(0, 0, theta)
+			odom.header.frame_id = "odom"
+			odom.child_frame_id = "base_link"
+			odom.pose.pose.position = Point(x, y, 0.0)
+			odom_quat = tf.transformations.quaternion_from_euler(0, 0, theta)
+			odom.pose.pose.orientation.x = odom_quat[0]
+			odom.pose.pose.orientation.y = odom_quat[1]
+			odom.pose.pose.orientation.z = odom_quat[2]
+			odom.pose.pose.orientation.w = odom_quat[3]
 			odom.twist.twist.linear.x = v_x
 			odom.twist.twist.linear.y = v_y
 			odom.twist.twist.angular.z = omega
