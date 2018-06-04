@@ -36,7 +36,7 @@ double y = 0;
 double theta = 0;
 double dtheta;
 // Time Parameters
-unsigned long dt = 100; // Unit: ms, 10Hz
+unsigned long dt = 10; // Unit: ms, 100Hz
 unsigned long now;
 unsigned long _time;
 void setup() {

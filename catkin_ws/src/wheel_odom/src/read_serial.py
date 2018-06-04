@@ -2,12 +2,15 @@
 import rospy
 import tf
 import serial
+from nav_msgs.msg import Odometry
 
 br = tf.TransformBroadcaster()
 
 def read_data(event):
+	pub_odom = rospy.Publisher("/odom", Odometry, queue_size = 10)
 	global str_
 	str_ = str('')
+	seq = 0
 	while ard.inWaiting():
 		str_ = ard.readline()
 	split_str = str_.split(' ')
@@ -29,7 +32,20 @@ def read_data(event):
 				 	rospy.Time.now(),
 				 	'odom',
 				 	'map')
+			odom = Odometry()
+			odom.header.seq = seq
+			odom.header.stamp = rospy.Time.now()
+			odom.header.frame_id = "map"
+			odom.child_frame_id = "odom"
+			odom.pose.position.x = x
+			odom.pose.position.y = y
+			odom.pose.quaternion = tf.transformations.quaternion_from_euler(0, 0, theta)
+			odom.twist.linear.x = v_x
+			odom.twist.linear.y = v_y
+			odom.twist.angular.z = omega
+			pub_odom.publish(odom)
 			print("x: ", x,", y: " , y, ", theta: ", theta)
+			seq = seq + 1
 		except ValueError:
 			pass
 
