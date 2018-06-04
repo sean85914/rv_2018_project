@@ -2,9 +2,8 @@
 import rospy
 import tf
 import serial
-<<<<<<< HEAD
 from nav_msgs.msg import Odometry
-=======
+
 global x, y, theta, v_L, v_R, v_x, v_y
 x = 0
 y = 0
@@ -13,7 +12,7 @@ v_L = 0
 v_R = 0
 v_x = 0
 v_y = 0
->>>>>>> affe43ffab986070f699a1e254939031adacbd04
+
 
 br = tf.TransformBroadcaster()
 
