@@ -37,7 +37,7 @@ def read_data(event):
 		odom.header.seq = seq
 		odom.header.stamp = rospy.Time.now()
 		odom.header.frame_id = "odom"
-		odom.child_frame = "base_link"
+		odom.child_frame_id = "base_link"
 		odom.pose.pose.position = Point(x, y, 0.0)
 		odom_quat = tf.transformations.quaternion_from_euler(0, 0, theta)
 		odom.pose.pose.orientation.x = odom_quat[0]
