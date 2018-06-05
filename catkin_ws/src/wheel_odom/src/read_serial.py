@@ -15,8 +15,9 @@ v_R = 0
 v_x = 0
 v_y = 0
 omega = 0
-
-br = tf.TransformBroadcaster()
+pub_tf = False
+if(pub_tf):
+	br = tf.TransformBroadcaster()
 
 def read_data(event):
 	pub_odom = rospy.Publisher("/odom", Odometry, queue_size = 10)
@@ -28,11 +29,12 @@ def read_data(event):
 	split_str = str_.split(' ')
 	if len(split_str) != 8:
 		global x, y, theta
-		br.sendTransform((x, y, 0),
-				 tf.transformations.quaternion_from_euler(0, 0, theta),
-				 rospy.Time.now(),
-				 'odom',
-				 'map')
+		if(pub_tf):
+			br.sendTransform((x, y, 0),
+				 	tf.transformations.quaternion_from_euler(0, 0, theta),
+				 	rospy.Time.now(),
+				 	'odom',
+				 	'map')
 		odom = Odometry()
 		odom.header.seq = seq
 		odom.header.stamp = rospy.Time.now()
@@ -57,11 +59,12 @@ def read_data(event):
 			v_x     = float(split_str[5])
 			v_y     = float(split_str[6])
 			omega   = float(split_str[7])
-			br.sendTransform((x, y, 0),
-				 	tf.transformations.quaternion_from_euler(0, 0, theta),
-				 	rospy.Time.now(),
-				 	'base_link',
-				 	'odom')
+			if(pub_tf):
+				br.sendTransform((x, y, 0),
+				 		tf.transformations.quaternion_from_euler(0, 0, theta),
+				 		rospy.Time.now(),
+				 		'base_link',
+				 		'odom')
 			odom = Odometry()
 			odom.header.seq = seq
 			odom.header.stamp = rospy.Time.now()
