@@ -1,5 +1,12 @@
 <launch>
+	<!-- Joy Mapper -->
 	<include file="$(find joy_mapper_sean)/launch/joy_mapper.launch"/>
+	<!-- Inverse Kinematic -->
 	<include file="$(find wheel_controller)/launch/wheel_controller.launch"/>
+	<!-- Wheel Odometry -->
 	<include file="$(find wheel_odom)/launch/wheel_odom.launch"/>
+	<!-- IMU -->
+	<include file="$(find razor_imu_9dof)/launch/razor-pub.launch"/>
+	<!-- Static Transform -->
+	<include file="$(find joystick_control)/launch/static_tf.launch"/>
 </launch>
