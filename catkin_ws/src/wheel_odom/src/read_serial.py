@@ -33,6 +33,19 @@ def read_data(event):
 				 rospy.Time.now(),
 				 'odom',
 				 'map')
+		odom = Odometry()
+		odom.header.seq = seq
+		odom.header.stamp = rospy.Time.now()
+		odom.header.frame_id = "odom"
+		odom.child_frame = "base_link"
+		odom.pose.pose.position = Point(x, y, 0.0)
+		odom_quat = tf.transformations.quaternion_from_euler(0, 0, theta)
+		odom.pose.pose.orientation.x = odom_quat[0]
+		odom.pose.pose.orientation.y = odom_quat[1]
+		odom.pose.pose.orientation.z = odom_quat[2]
+		odom.pose.pose.orientation.w = odom_quat[3]
+		seq = seq + 1
+		pub_odom.publish(odom)
 	else:
 		try:
 			global x, y, theta, v_L, v_R, v_x, v_y, omega
@@ -73,5 +86,5 @@ if __name__ == '__main__':
 	rospy.init_node('whel_odom_node', anonymous = False)
 	port = rospy.get_param("~port", "/dev/ttyACM0") # default port: /dev/ttyUSB0
 	ard = serial.Serial(port, 9600)
-	rospy.Timer(rospy.Duration.from_sec(0.1), read_data)
+	rospy.Timer(rospy.Duration.from_sec(0.01), read_data) #
 	rospy.spin()
