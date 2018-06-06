@@ -1,6 +1,6 @@
 # rv_2018_project
 ## Purpose: 
-### Use self-designed AGV (as follow image) to simulate RobotX competition task, mainly avoid obstacle one  
+### Use self-designed AGV (as following image) to simulate RobotX competition task, mainly avoid obstacle one  
 ![](https://github.com/seanNCTU/rv_2018_project/blob/master/img/AGV.jpg)
 
 ## MCU:
