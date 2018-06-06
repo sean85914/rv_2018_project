@@ -20,13 +20,13 @@
 
 # How to install
 
-...
+```
 	$ source /opt/ros/kinetic/setup.bash
 	$ cd
 	$ git clone https://github.com/seanNCTU/rv_2018_project.git
 	$ cd rv_2018_project/catkin_ws
 	$ catkin_make install
 	$ catkin_make
-...
+```
 
 And upload wheel_odom/wheel_odom.ino to your Arduino
