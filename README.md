@@ -27,6 +27,7 @@
 	$ cd rv_2018_project/catkin_ws
 	$ catkin_make install
 	$ catkin_make
+	$ source devel/setup.bash
 ```
 
 And upload wheel_odom/wheel_odom.ino to your Arduino
