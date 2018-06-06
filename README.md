@@ -1,7 +1,7 @@
 # rv_2018_project
 ## Purpose: 
-###Use self-designed AGV (as follow image) to simulate RobotX competition task, mainly avoid obstacle one  
-![](https://github.com/seanNCTU/rv_2018_project/)
+### Use self-designed AGV (as follow image) to simulate RobotX competition task, mainly avoid obstacle one  
+![](https://github.com/seanNCTU/rv_2018_project/blob/master/img/AGV.jpg)
 
 ## MCU:
 ### Arduino UNO
@@ -10,7 +10,7 @@
 
 ## System framework: 
 ### Ubuntu 16.04 
-### ROS, kinetic
+### ROS, Kinetic
 
 ## Sensors:
 ### 12-volt motors w/ encoder (differential drive)
