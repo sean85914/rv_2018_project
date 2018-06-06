@@ -20,7 +20,7 @@ if(pub_tf):
 	br = tf.TransformBroadcaster()
 
 def read_data(event):
-	pub_odom = rospy.Publisher("/odom", Odometry, queue_size = 30)
+	pub_odom = rospy.Publisher("/odom", Odometry, queue_size = 1)
 	global str_
 	str_ = str('')
 	seq = 0
