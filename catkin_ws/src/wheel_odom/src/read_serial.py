@@ -28,6 +28,7 @@ def read_data(event):
 		str_ = ard.readline()
 	split_str = str_.split(' ')
 	if len(split_str) != 8:
+		print "Errrrrrror"
 		global x, y, theta
 		if(pub_tf):
 			br.sendTransform((x, y, 0),
@@ -38,8 +39,8 @@ def read_data(event):
 		odom = Odometry()
 		odom.header.seq = seq
 		odom.header.stamp = rospy.Time.now()
-		odom.header.frame_id = "odom"
-		odom.child_frame_id = "base_link"
+		odom.header.frame_id = "/odom"
+		odom.child_frame_id = "/base_link"
 		odom.pose.pose.position = Point(x, y, 0.0)
 		odom_quat = tf.transformations.quaternion_from_euler(0, 0, theta)
 		odom.pose.pose.orientation.x = odom_quat[0]
@@ -68,8 +69,8 @@ def read_data(event):
 			odom = Odometry()
 			odom.header.seq = seq
 			odom.header.stamp = rospy.Time.now()
-			odom.header.frame_id = "odom"
-			odom.child_frame_id = "base_link"
+			odom.header.frame_id = "/odom"
+			odom.child_frame_id = "/base_link"
 			odom.pose.pose.position = Point(x, y, 0.0)
 			odom_quat = tf.transformations.quaternion_from_euler(0, 0, theta)
 			odom.pose.pose.orientation.x = odom_quat[0]
@@ -89,5 +90,5 @@ if __name__ == '__main__':
 	rospy.init_node('whel_odom_node', anonymous = False)
 	port = rospy.get_param("~port", "/dev/ttyACM0") # default port: /dev/ttyUSB0
 	ard = serial.Serial(port, 9600)
-	rospy.Timer(rospy.Duration.from_sec(0.05), read_data) # 20Hz
+	rospy.Timer(rospy.Duration.from_sec(0.1), read_data) # 10Hz
 	rospy.spin()
