@@ -9,4 +9,6 @@
 	<include file="$(find razor_imu_9dof)/launch/razor-pub.launch"/>
 	<!-- Static Transform -->
 	<include file="$(find joystick_control)/launch/static_tf.launch"/>
+	<!-- Robot Localization -->
+	<include file="$(find robot_localization)/launch/ekf_template.launch"/>
 </launch>

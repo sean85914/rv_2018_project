@@ -1,4 +1,4 @@
 <launch>
-	<node pkg="tf" type="static_transform_publisher" name="imu_link_broadcaster" args="-0.095 -0.010 0.035 0 0 0 1 base_link base_imu_link 100"/>
+	<node pkg="tf" type="static_transform_publisher" name="imu_link_broadcaster" args="-0.095 -0.010 0.035 0 0 0 1 base_link base_imu_link 10"/>
 
 </launch>

@@ -15,7 +15,7 @@ v_R = 0
 v_x = 0
 v_y = 0
 omega = 0
-pub_tf = False
+pub_tf = False # Use estimate result as tf
 if(pub_tf):
 	br = tf.TransformBroadcaster()
 
@@ -28,7 +28,6 @@ def read_data(event):
 		str_ = ard.readline()
 	split_str = str_.split(' ')
 	if len(split_str) != 8:
-		print "Errrrrrror"
 		global x, y, theta
 		if(pub_tf):
 			br.sendTransform((x, y, 0),
@@ -39,8 +38,8 @@ def read_data(event):
 		odom = Odometry()
 		odom.header.seq = seq
 		odom.header.stamp = rospy.Time.now()
-		odom.header.frame_id = "/odom"
-		odom.child_frame_id = "/base_link"
+		odom.header.frame_id = "odom"
+		odom.child_frame_id = "base_link"
 		odom.pose.pose.position = Point(x, y, 0.0)
 		odom_quat = tf.transformations.quaternion_from_euler(0, 0, theta)
 		odom.pose.pose.orientation.x = odom_quat[0]
@@ -69,8 +68,8 @@ def read_data(event):
 			odom = Odometry()
 			odom.header.seq = seq
 			odom.header.stamp = rospy.Time.now()
-			odom.header.frame_id = "/odom"
-			odom.child_frame_id = "/base_link"
+			odom.header.frame_id = "odom"
+			odom.child_frame_id = "base_link"
 			odom.pose.pose.position = Point(x, y, 0.0)
 			odom_quat = tf.transformations.quaternion_from_euler(0, 0, theta)
 			odom.pose.pose.orientation.x = odom_quat[0]
