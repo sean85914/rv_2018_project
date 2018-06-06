@@ -1,5 +1,5 @@
 <launch>
 	<node pkg="joy" type="joy_node" name="joy_node" output="screen" clear_params="true" required="true"/>
 	<node pkg="joy_mapper_sean" type="joy_mapper_node.py" name="joy_mapper" output="screen" clear_params="true" required="true"/>
-		<rosparam command="load" file="$(joy_mapper_sean)/config/joy_mapper_config.yaml"/>
+		<rosparam command="load" file="$(find joy_mapper_sean)/config/joy_mapper_config.yaml"/>
 </launch>
