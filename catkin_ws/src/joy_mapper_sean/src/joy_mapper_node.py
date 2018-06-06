@@ -13,9 +13,9 @@ class JoyMapper(object):
 
 		self.pub_car_cmd = rospy.Publisher("car_cmd", Twist, queue_size=1)
 		self.sub_joy = rospy.Subscriber("joy", Joy, self.cbJoy, queue_size=1)
-
+		# Parameters
 		self.v_gain = rospy.get_param("speed_gain", 0.2)
-		self.omega_gain	= rospy.get_param("omega_gain", 0.2)
+		self.omega_gain	= rospy.get_param("omega_gain", 0.4)
 
 	def cbJoy(self, joy_msg):
 		self.joy = joy_msg
