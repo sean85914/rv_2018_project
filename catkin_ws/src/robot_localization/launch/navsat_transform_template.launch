@@ -37,8 +37,10 @@
 -->
 
 <launch>
+  <remap from="imu/data" to="imu"/>
+  <remap from="gps/fix" to="fix"/>
   <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node" clear_params="true">
-    <rosparam command="load" file="$(find robot_localization)/params/navsat_transform_template.yaml" />
+    <rosparam command="load" file="$(find robot_localization)/params/rv_gps.yaml" />
 
       <!-- Placeholders for input remapping. Set your topic names as the "to" values.
       <remap from="imu/data" to=""/>
