@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 import serial
 import sys
+import time
+import calendar
 import rospy
 from sensor_msgs.msg import NavSatFix
+
+# Convert Saxagesimal to decimal
 def Sexagesimal2Decimal(data_in):
 	length = len(data_in)
 	# 6 bit min + 1 bit dot
@@ -10,6 +14,19 @@ def Sexagesimal2Decimal(data_in):
 	min_ = float(data_in[length-7 :length])
 	data_out += min_ / 60.
 	return data_out
+
+# Convert HHMMSS to time.time() format
+def ToTimeFormat(in_str):
+	utc_struct = time.gmtime()
+	utc_list = list(utc_struct)
+	hours   = int(in_str[0:2])
+	minutes = int(in_str[2:4])
+	seconds = int(in_str[4:6])
+	utc_list[3] = hours
+	utc_list[4] = minutes
+	utc_list[5] = seconds
+	return calendar.timegm(tuple(utc_list))
+
 class GPSHandler(object):
 	def __init__(self, port):
 		self.node_name = rospy.get_name()
@@ -31,10 +48,10 @@ class GPSHandler(object):
 			rospy.loginfo("[%s] No data receiving ... Try go outside?" %(self.node_name))
 			return
 		# info format:
-		# GPGGA UTC_time latitude N/S longitude E/W state  number_of_sat HDOP altitude others
+		# GPGGA UTC_time latitude N/S longitude E/W state  number_of_sat HDOP altitude others		
 		fix = NavSatFix()
 		fix.header.seq = self.seq
-		fix.header.stamp = rospy.Time.now() 
+		fix.header.stamp = ToTimeFormat(self.info_list[1])
 		fix.header.frame_id = 'gps_'
 		lat = float(Sexagesimal2Decimal(self.info_list[2]))
 		longi = float(Sexagesimal2Decimal(self.info_list[4]))
@@ -50,7 +67,15 @@ class GPSHandler(object):
 		rospy.loginfo("[%s] %s %s %s %s" %(self.node_name, self.info_list[3], 
 						   lat, self.info_list[5],
 						   longi))
-		fix.altitude = float(self.info_list[9])
+		# Covariance matrix
+		# Refer to nmea_navsat_driver
+		hdop = float(self.info_list[8])
+		fix.position_covariance[0] = hdop ** 2
+		fix.position_covariance[4] = hdop ** 2
+		fix.position_covariance[8] = (2* hdop) ** 2
+		fix.position_covariance_type = \
+			NavSatFix.COVARIANCE_TYPE_APPROXIMATED
+		fix.altitude = float(self.info_list[9]) + float(self.info_list[11])
 		self.pub_fix.publish(fix)
 		self.info = ""
 		self.info_list = None
