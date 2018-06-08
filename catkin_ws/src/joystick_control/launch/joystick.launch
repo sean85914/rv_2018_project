@@ -1,5 +1,6 @@
 <launch>
 	<!-- Joy mapper -->
+	<!-- Run on PC -->
 	<!-- include file="$(find joy_mapper_sean)/launch/joy_mapper.launch"/ -->
 	<!-- Inverse kinematic -->
 	<include file="$(find wheel_controller)/launch/wheel_controller.launch"/>
