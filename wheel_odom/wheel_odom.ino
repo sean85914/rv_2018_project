@@ -6,7 +6,7 @@
 #include "math.h"
 // Structure Parameters (unit: meter)
 #define WIDTH 0.291
-#define RADIUS 0.125
+#define RADIUS 0.0625
 // For debug
 #define DEBUG 0
 // Encoder Parameters
