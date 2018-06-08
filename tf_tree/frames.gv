@@ -1,0 +1,9 @@
+digraph G {
+"odom" -> "utm"[label="Broadcaster: /play_1528472659550125843\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1528472743.338 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "base_imu_link"[label="Broadcaster: /play_1528472659550125843\nAverage rate: 98.691 Hz\nMost recent transform: 1528471617.993 ( 1125.345 sec old)\nBuffer length: 4.985 sec\n"];
+"odom" -> "base_link"[label="Broadcaster: /play_1528472659550125843\nAverage rate: 26.144 Hz\nMost recent transform: 1528471617.912 ( 1125.426 sec old)\nBuffer length: 4.934 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1528472743.338"[ shape=plaintext ] ;
+ }->"odom";
+}
