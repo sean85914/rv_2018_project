@@ -46,6 +46,9 @@ def read_data(event):
 		odom.pose.pose.orientation.y = odom_quat[1]
 		odom.pose.pose.orientation.z = odom_quat[2]
 		odom.pose.pose.orientation.w = odom_quat[3]
+		odom.pose.covariance[0] = 1.02
+		odom.pose.covariance[7] = 1.01
+		odom.pose.covariance[35] = 0.91
 		seq = seq + 1
 		pub_odom.publish(odom)
 	else:
