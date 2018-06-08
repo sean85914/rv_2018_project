@@ -51,19 +51,23 @@ class GPSHandler(object):
 		# GPGGA UTC_time latitude N/S longitude E/W state  number_of_sat HDOP altitude others		
 		fix = NavSatFix()
 		fix.header.seq = self.seq
+		# Use received data
 		fix.header.stamp = ToTimeFormat(self.info_list[1])
+		# Use rospy.Time.now
+		#fix.header.stamp = rospy.Time.now()
 		fix.header.frame_id = 'gps_'
 		lat = float(Sexagesimal2Decimal(self.info_list[2]))
 		longi = float(Sexagesimal2Decimal(self.info_list[4]))
 		if self.info_list[3] == 'S':
 			fix.latitude = -lat
-			
 		else:
 			fix.latitude = lat
+
 		if self.info_list[5] == 'W':
 			fix.longitude = -longi
 		else:
 			fix.longitude = longi
+
 		rospy.loginfo("[%s] %s %s %s %s" %(self.node_name, self.info_list[3], 
 						   lat, self.info_list[5],
 						   longi))
