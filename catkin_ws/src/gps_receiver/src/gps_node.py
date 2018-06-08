@@ -52,9 +52,9 @@ class GPSHandler(object):
 		fix = NavSatFix()
 		fix.header.seq = self.seq
 		# Use received data
-		fix.header.stamp = ToTimeFormat(self.info_list[1])
+		#fix.header.stamp = ToTimeFormat(self.info_list[1])
 		# Use rospy.Time.now
-		#fix.header.stamp = rospy.Time.now()
+		fix.header.stamp = rospy.Time.now()
 		fix.header.frame_id = 'gps_'
 		lat = float(Sexagesimal2Decimal(self.info_list[2]))
 		longi = float(Sexagesimal2Decimal(self.info_list[4]))
