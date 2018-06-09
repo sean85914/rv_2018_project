@@ -16,4 +16,6 @@
 	<include file="$(find robot_localization)/launch/ekf_template.launch"/>
 	<!-- Robot localization, gps -->
 	<include file="$(find robot_localization)/launch/navsat_transform_template.launch"/>
+	<!-- Visualize path -->
+	<include file="$(find visualize_data)/launch/plot_path.launch"/>
 </launch>
