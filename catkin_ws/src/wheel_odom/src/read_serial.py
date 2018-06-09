@@ -53,7 +53,6 @@ def read_data(event):
 		pub_odom.publish(odom)
 	else:
 		try:
-			global x, y, theta, v_L, v_R, v_x, v_y, omega
 			x 	= float(split_str[0])
 			y 	= float(split_str[1])
 			theta   = float(split_str[2])
