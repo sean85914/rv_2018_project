@@ -73,7 +73,10 @@ class GPSHandler(object):
 						   longi))
 		# Covariance matrix
 		# Refer to nmea_navsat_driver
-		hdop = float(self.info_list[8])
+		try:
+			hdop = float(self.info_list[8])
+		except ValueError:
+			pass
 		fix.position_covariance[0] = hdop ** 2
 		fix.position_covariance[4] = hdop ** 2
 		fix.position_covariance[8] = (2* hdop) ** 2
