@@ -6,7 +6,11 @@
 nav_msgs/Odometry: /odometry/filtered
 #### Publish: 
 geometry_msgs/Twist: /car_cmd
+
+
 std_msg/Bool: /pure_pursuit/finished
+
+
 geometry_msgs/Point: /pure_pursuit/lookahead
 
 # How to run
