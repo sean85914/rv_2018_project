@@ -8,13 +8,15 @@ from std_msgs.msg import Bool
 
 def handle_e_stop(req):
 	resp = e_stopResponse()
+	stop = Bool()
 	if req.stop == True:
 		resp.result = True
-		stop = Bool()
 		stop.data = True
 		pub_e_stop.publish(stop)
 	else:
 		resp.result = False
+		stop.data = False
+		pub_e_stop.publish(stop)
 	return resp
 
 if __name__ == "__main__":
