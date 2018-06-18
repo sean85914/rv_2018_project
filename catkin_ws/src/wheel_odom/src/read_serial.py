@@ -82,7 +82,7 @@ def read_data(event):
 			odom.twist.twist.linear.y = v_y
 			odom.twist.twist.angular.z = omega
 			pub_odom.publish(odom)
-			print("x: ", x,", y: " , y, ", theta: ", theta)
+			rospy.loginfo("[%s] x: %s, y: %s, theta: %s" %(rospy.get_name(), x, y, theta))
 			seq = seq + 1
 		except ValueError:
 			pass

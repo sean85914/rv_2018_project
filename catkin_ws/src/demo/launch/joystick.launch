@@ -11,7 +11,7 @@
 	<!-- GPS -->
 	<include file="$(find gps_receiver)/launch/gps.launch"/>
 	<!-- Static transform -->
-	<include file="$(find joystick_control)/launch/static_tf.launch"/>
+	<include file="$(find demo)/launch/static_tf.launch"/>
 	<!-- Robot localization, pose estimate -->
 	<include file="$(find robot_localization)/launch/ekf_template.launch"/>
 	<!-- Robot localization, gps -->
