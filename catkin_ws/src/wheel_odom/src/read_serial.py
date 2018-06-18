@@ -33,8 +33,8 @@ def read_data(event):
 			br.sendTransform((x, y, 0),
 				 	tf.transformations.quaternion_from_euler(0, 0, theta),
 				 	rospy.Time.now(),
-				 	'odom',
-				 	'map')
+				 	'base_link',
+				 	'odom')
 		odom = Odometry()
 		odom.header.seq = seq
 		odom.header.stamp = rospy.Time.now()
@@ -46,9 +46,10 @@ def read_data(event):
 		odom.pose.pose.orientation.y = odom_quat[1]
 		odom.pose.pose.orientation.z = odom_quat[2]
 		odom.pose.pose.orientation.w = odom_quat[3]
-		odom.pose.covariance[0] = 0.2 # X
-		odom.pose.covariance[7] = 0.2 # Y
-		odom.pose.covariance[35] = 0.05 # Theta
+		# Variances: TBD
+		odom.pose.covariance[0] = 1.0 # X
+		odom.pose.covariance[7] = 1.0 # Y
+		odom.pose.covariance[35] = 0.1 # Theta
 		seq = seq + 1
 		pub_odom.publish(odom)
 	else:
