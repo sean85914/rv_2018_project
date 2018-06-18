@@ -79,6 +79,9 @@ def read_data(event):
 			odom.pose.pose.orientation.y = odom_quat[1]
 			odom.pose.pose.orientation.z = odom_quat[2]
 			odom.pose.pose.orientation.w = odom_quat[3]
+			odom.pose.covariance[0] = 1.0 # X
+			odom.pose.covariance[1] = 1.0 # Y
+			odom.pose.covariance[2] = 0.1 # Theta
 			odom.twist.twist.linear.x = v_x
 			odom.twist.twist.linear.y = v_y
 			odom.twist.twist.angular.z = omega
