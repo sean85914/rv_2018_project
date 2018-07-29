@@ -31,3 +31,16 @@
 ```
 
 And upload wheel_odom/wheel_odom.ino to your Arduino
+
+# How to use joystick to control the robot and run localization
+
+First, make one of the robot or your laptop as ROS master.
+Since there are only four USB ports on PI, we should put our joystick  
+receiver to our laptop, so in your laptop, run
+```
+	$ roslaunch joy_mapper_sean joy_mapper.launch
+```
+And, in your PI, run
+```
+	$ roslaunch demo joystick.launch
+```
