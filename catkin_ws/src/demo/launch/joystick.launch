@@ -1,0 +1,21 @@
+<launch>
+	<!-- Joy mapper -->
+	<!-- Run on PC -->
+	<!-- include file="$(find joy_mapper_sean)/launch/joy_mapper.launch"/ -->
+	<!-- Inverse kinematic -->
+	<include file="$(find wheel_controller)/launch/wheel_controller.launch"/>
+	<!-- Wheel odometry -->
+	<include file="$(find wheel_odom)/launch/wheel_odom.launch"/>
+	<!-- IMU -->
+	<include file="$(find razor_imu_9dof)/launch/razor-pub.launch"/>
+	<!-- GPS -->
+	<include file="$(find gps_receiver)/launch/gps.launch"/>
+	<!-- Static transform -->
+	<include file="$(find demo)/launch/static_tf.launch"/>
+	<!-- Robot localization, pose estimate -->
+	<include file="$(find robot_localization)/launch/ekf_template.launch"/>
+	<!-- Robot localization, gps -->
+	<include file="$(find robot_localization)/launch/navsat_transform_template.launch"/>
+	<!-- Visualize path -->
+	<include file="$(find visualize_data)/launch/plot_path.launch"/>
+</launch>

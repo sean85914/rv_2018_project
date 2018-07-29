@@ -1,3 +1,6 @@
 <launch>
+	<!-- Inverse kinematic -->
 	<node pkg="wheel_controller" type="wheel_controller_node.py" name="wheel_controller_node" output="screen" clear_params="true" required="true"/>
+	<!-- E-stop -->
+	<node pkg="wheel_controller" type="e_stop_server.py" name="e_stop_server_node" output="screen" clear_params="true" required="true"/>
 </launch>

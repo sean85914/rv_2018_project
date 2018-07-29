@@ -12,11 +12,12 @@ class RRTPlanning(object):
 		self.node_name = rospy.get_name()
 		rospy.loginfo("[%s] Initializing ..." %(self.node_name))
 		
-		self.pub_waypointList = rospy.Publisher("WaypointList", WaypointList, queue_size=1)
-		self.sub_obstacleList = rospy.Subscriber("ObstacleList", ObstaclePoseList, self.cb_obstacle, queue_size=1)
+		self.pub_waypointList = rospy.Publisher("/waypointList", WaypointList, queue_size = 1)
+		self.sub_obstacleList = rospy.Subscriber("/obstacleList", ObstaclePoseList, self.cb_obstacle, queue_size=1)
+		self.sub_goal		  = rospy.Subscriber("/goal", WaypointList, self.cb_wplist, queue_size = 1)
 		# Dimension
-		self.X_DIM = 2
-		self.Y_DIM = 0.8
+		self.X_DIM = None
+		self.Y_DIM = None
 		# Goal point
 		self.q_goal = np.array([self.X_DIM, self.Y_DIM])
 		# Inital point
@@ -35,6 +36,7 @@ class RRTPlanning(object):
 		self.waypoint_size = 1
 		# Waypoint list
 		self.waypoint_list = WaypointList()
+		self.waypoint_list.header.frame_id = "odom"
 		# q_list size
 		self.q_size = 1
 		# q_list
@@ -44,12 +46,19 @@ class RRTPlanning(object):
 		# q_rand
 		self.published = False
 
+	def cb_wplist(self, wp_list_msg):
+		length = len(wp_list_msg.list)
+		self.X_DIM = wp_list_msg.list[length-1].x
+		self.Y_DIM = wp_list_msg.list[length-1].y
+
 	def cb_obstacle(self, obstacle_msg):
 		self.obstacle_list = obstacle_msg
-		if self.published is False:
+		if self.published is False and self.X_DIM is not None:
 			self._rrt_process()
 		else:
+			self.waypoint_list.header.stamp = rospy.Time.now()
 			self.pub_waypointList.publish(self.waypoint_list)
+
 	def _rrt_process(self):
 		while (np.linalg.norm(self.q_goal - self.q_near) > self.epsilon):
 			
@@ -89,6 +98,7 @@ class RRTPlanning(object):
 			waypoint.y = self.q_list[waypoint_index_list[i-1]-1][1]
 			print waypoint.x, waypoint.y
 			self.waypoint_list.list.append(waypoint)
+		self.waypoint_list.header.stamp = rospy.Time.now()
 		self.pub_waypointList.publish(self.waypoint_list)
 		self.published = True
 		print "q_list", self.q_list

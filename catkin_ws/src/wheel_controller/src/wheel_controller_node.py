@@ -39,7 +39,7 @@ class WheelController(object):
 			self.right_motor.setSpeed(0)
 			self.left_motor.run(4)
 			self.right_motor.run(4)
-	
+			rospy.loginfo("[%s] Emergency stop!" %(self.node_name))	
 			rospy.sleep(0.1)
 		else:
 			if(twist_msg.linear.x != 0):
