@@ -55,7 +55,7 @@ class GPSHandler(object):
 		#fix.header.stamp = ToTimeFormat(self.info_list[1])
 		# Use rospy.Time.now
 		fix.header.stamp = rospy.Time.now()
-		fix.header.frame_id = 'gps_'
+		fix.header.frame_id = 'gps_link'
 		lat = float(Sexagesimal2Decimal(self.info_list[2]))
 		longi = float(Sexagesimal2Decimal(self.info_list[4]))
 		if self.info_list[3] == 'S':
