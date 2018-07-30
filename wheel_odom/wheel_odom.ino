@@ -3,13 +3,20 @@
 // Left  motor C2 -> Pin10
 // Right motor C2 -> Pin!1
 // Don't forget to power encoders on!
+// Frame definition:
+//  Forward: positive X
+//  Left: positive Y
+// Wheel odometry provides v_x, theta, v_L and v_R
 #include "math.h"
 // Structure Parameters (unit: meter)
+// WIDTH: distance between two wheels
 #define WIDTH 0.291
+// RADIUS: wheel radius
 #define RADIUS 0.0625
 // For debug
 #define DEBUG 0
 // Encoder Parameters
+// PPR: pulse per round
 #define PPR 990
 // Pin Parameters
 int encoderL = 10;
@@ -25,14 +32,10 @@ int encoderLPrior = 0;
 int encoderRPrior = 0;
 // Vehicle Speed Parameters (unit: m/s)
 double v_x;
-double v_y;
-double omega;
 // Motor Speed Parameters (unit: m/s)
 double v_L;
 double v_R;
 // Location Parameters (unit: m and rad)
-double x = 0;
-double y = 0;
 double theta = 0;
 double dtheta;
 // Time Parameters
@@ -62,11 +65,7 @@ void loop() {
     v_L = disL / _time * 1000;
     v_R = disR / _time * 1000;
     dtheta = (disR - disL) / WIDTH;
-    omega = dtheta / _time * 1000;
-    v_x = (disR + disL) / 2 * cos(theta + dtheta / 2.) / _time * 1000;
-    v_y = (disR + disL) / 2 * sin(theta + dtheta / 2.) / _time * 1000;
-    x += (disR + disL) / 2 * cos(theta + dtheta / 2.);
-    y += (disR + disL) / 2 * sin(theta + dtheta / 2.);
+    v_x = (disR + disL) / 2;
     theta += dtheta;
     // Set theta in range [0, 2*pi)
     if(theta >= 2 * PI ) theta -= 2 * PI;
@@ -77,7 +76,7 @@ void loop() {
     now = millis();
   }
   // Display Information
-  // Format: x y theta v_L v_R v_x v_y omega
+  // Format: theta v_L v_R v_x
   display();
 }
 
@@ -110,8 +109,8 @@ void EncoderR()
 void display()
 {
   if(!DEBUG)  {
-    // Format: x y theta v_L v_R v_x v_y omega
-    Serial.print(x);Serial.print(" ");Serial.print(y);Serial.print(" ");Serial.print(theta);Serial.print(" ");Serial.print(v_L);
-    Serial.print(" ");Serial.print(v_R);Serial.print(" ");Serial.print(v_x);Serial.print(" ");Serial.print(v_y);Serial.print(" ");Serial.println(omega);
+    // Format: theta v_L v_R v_x
+    Serial.print(theta);Serial.print(" ");Serial.print(v_L);
+    Serial.print(" ");Serial.print(v_R);Serial.print(" ");Serial.print(v_x);Serial.print(" ");
   }
 }
