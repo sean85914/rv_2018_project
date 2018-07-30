@@ -190,7 +190,7 @@ class RRTPlanning(object):
 			counter = counter + 1
 		#end while (counter)
 		return result
-	#end _is_hot_constrain
+	#end _is_hit_constrain
 	
 if __name__ == "__main__":
 	rospy.init_node("rrt_planning_node", anonymous = False)
