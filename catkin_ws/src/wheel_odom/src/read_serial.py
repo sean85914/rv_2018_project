@@ -4,6 +4,7 @@ import tf
 import serial
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point
+from robotx_msgs.msg import Two_wheels_velocity
 
 global theta, v_L, v_R, v_x
 
@@ -13,7 +14,8 @@ v_R = 0
 v_x = 0
 
 def read_data(event):
-	pub_odom = rospy.Publisher("/odom", Odometry, queue_size = 1)
+	pub_odom = rospy.Publisher("/odom", Odometry, queue_size = 20)
+	pub_velocity = rospy.Publisher("/two_wheels_feedback", Two_wheels_velocity, queue_size = 20)
 	global str_
 	str_ = str('')
 	seq = 0
@@ -61,6 +63,10 @@ def read_data(event):
 			pub_odom.publish(odom)
 			rospy.loginfo("[%s] v_x: %s, theta: %s" %(rospy.get_name(), v_x, theta))
 			seq = seq + 1
+			feedback = TwoW_wheels_velocity()
+			feedback.left = v_L
+			feedback.right = v_R
+			pub_velocity.publish(feedback)
 		except ValueError:
 			pass
 
