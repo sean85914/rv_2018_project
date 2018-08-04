@@ -54,6 +54,7 @@ add_message_files(
    ObstaclePoseList.msg
    Waypoint.msg
    WaypointList.msg
+   Two_wheels_velocity.msg
 )
 
 ## Generate services in the 'srv' folder
