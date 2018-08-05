@@ -65,7 +65,7 @@ void loop() {
     v_L = disL / _time * 1000;
     v_R = disR / _time * 1000;
     dtheta = (disR - disL) / WIDTH;
-    v_x = (disR + disL) / 2;
+    v_x = (v_L + v_R) / 2;
     theta += dtheta;
     // Set theta in range [0, 2*pi)
     if(theta >= 2 * PI ) theta -= 2 * PI;
@@ -111,6 +111,6 @@ void display()
   if(!DEBUG)  {
     // Format: theta v_L v_R v_x
     Serial.print(theta);Serial.print(" ");Serial.print(v_L);
-    Serial.print(" ");Serial.print(v_R);Serial.print(" ");Serial.print(v_x);Serial.print(" ");
+    Serial.print(" ");Serial.print(v_R);Serial.print(" ");Serial.print(v_x);Serial.println(" ");
   }
 }
