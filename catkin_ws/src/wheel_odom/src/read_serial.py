@@ -74,5 +74,8 @@ if __name__ == '__main__':
 	rospy.init_node('whel_odom_node', anonymous = False)
 	port = rospy.get_param("~port", "/dev/ttyACM0") # default port: /dev/ttyUSB0
 	ard = serial.Serial(port, 9600)
+	rospy.loginfo("[%s] Flush first 20 data..." %(rospy.get_name()))
+	for i in range(20):
+		ard.readline()
 	rospy.Timer(rospy.Duration.from_sec(0.01), read_data) # 100Hz
 	rospy.spin()
