@@ -64,6 +64,7 @@ def read_data(event):
 			rospy.loginfo("[%s] v_x: %s, theta: %s" %(rospy.get_name(), v_x, theta))
 			seq = seq + 1
 			feedback = Two_wheels_velocity()
+			feedback.header.stamp = rospy.Time.now()
 			feedback.left = v_L
 			feedback.right = v_R
 			pub_velocity.publish(feedback)
