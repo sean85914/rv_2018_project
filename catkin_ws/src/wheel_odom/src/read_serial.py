@@ -20,10 +20,10 @@ def read_data(event):
 	str_ = str('')
 	seq = 0
 	while ard.inWaiting():
-		str_ = ard.readline()
+		str_ = ard.readline().strip()
 	split_str = str_.split(' ')
 	if len(split_str) != 4:
-		global x, y, theta
+		global x, y, theta, v_x
 		odom = Odometry()
 		odom.header.seq = seq
 		odom.header.stamp = rospy.Time.now()
@@ -63,7 +63,7 @@ def read_data(event):
 			pub_odom.publish(odom)
 			rospy.loginfo("[%s] v_x: %s, theta: %s" %(rospy.get_name(), v_x, theta))
 			seq = seq + 1
-			feedback = TwoW_wheels_velocity()
+			feedback = Two_wheels_velocity()
 			feedback.left = v_L
 			feedback.right = v_R
 			pub_velocity.publish(feedback)
