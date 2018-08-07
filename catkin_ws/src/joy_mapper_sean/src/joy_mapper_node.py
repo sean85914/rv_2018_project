@@ -2,7 +2,7 @@
 
 import rospy
 from sensor_msgs.msg import Joy
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TwistStamped
 
 class JoyMapper(object):
 	def __init__(self):
@@ -11,7 +11,7 @@ class JoyMapper(object):
 		
 		self.joy = None
 
-		self.pub_car_cmd = rospy.Publisher("car_cmd", Twist, queue_size=1)
+		self.pub_car_cmd = rospy.Publisher("car_cmd", TwistStamped, queue_size=1)
 		self.sub_joy = rospy.Subscriber("joy", Joy, self.cbJoy, queue_size=1)
 		# Parameters
 		self.v_gain = rospy.get_param("speed_gain", 0.2)
@@ -22,9 +22,10 @@ class JoyMapper(object):
 		self.publishControl()
 
 	def publishControl(self):
-		car_cmd = Twist()
-		car_cmd.linear.x = self.joy.axes[1] * self.v_gain
-		car_cmd.angular.z = self.joy.axes[3] * self.omega_gain
+		car_cmd = TwistStamped()
+		car_cmd.header.stamp = rospy.Time.now()
+		car_cmd.twist.linear.x = self.joy.axes[1] * self.v_gain
+		car_cmd.twist.angular.z = self.joy.axes[3] * self.omega_gain
 
 		self.pub_car_cmd.publish(car_cmd)
 
