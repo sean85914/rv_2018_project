@@ -1,6 +1,13 @@
 <launch>
-	<!-- Inverse kinematic -->
-	<node pkg="wheel_controller" type="wheel_controller_node.py" name="wheel_controller_node" output="screen" clear_params="true" required="true"/>
-	<!-- E-stop -->
-	<node pkg="wheel_controller" type="e_stop_server.py" name="e_stop_server_node" output="screen" clear_params="true" required="true"/>
+  <!-- arg -->
+  <arg name="pi_control" default="true" doc="true to use PID control"/>
+  <!-- Inverse kinematic -->
+  <group if="$(arg pi_control)">
+    <node pkg="wheel_controller" type="pi_control_node.py" name="wheel_controller_node" output="screen" clear_params="true" required="true"/>
+  </group>
+  <group unless="$(arg pi_control)">
+    <node pkg="wheel_controller" type="wheel_controller_node.py" name="wheel_controller_node" output="screen" clear_params="true" required="true"/>
+  </group>
+  <!-- E-stop -->
+  <node pkg="wheel_controller" type="e_stop_server.py" name="e_stop_server_node" output="screen" clear_params="true" required="true"/>
 </launch>
