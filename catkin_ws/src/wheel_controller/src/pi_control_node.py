@@ -2,8 +2,8 @@
 
 import rospy
 import message_filters
-from std_msgs import Bool
-from geometry_msgs.msg import Twist
+from std_msgs.msg import Bool
+from geometry_msgs.msg import TwistStamped
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 from robotx_msgs.msg import Two_wheels_velocity
 
@@ -41,9 +41,9 @@ class WheelController(object):
 		# Emergency stop flag
 		self.e_stop = None
 		# Subscribers
-		self.sub_car_cmd = message_filters.Subscriber("car_cmd", Twist, self.cb_car_cmd ,queue_size=10)
-		self.sub_feedback = message_filters.Subscriber("two_wheels_feedback", Two_wheels_velocity, self.cb_feedback, queue_size = 20)
-		ts = message_filters.TimeSynchronizer([self.sub_car_cmd, self.sub_feedback], 10)
+		sub_car_cmd = message_filters.Subscriber("/car_cmd", TwistStamped)
+		sub_feedback = message_filters.Subscriber("/two_wheels_feedback", Two_wheels_velocity)
+		ts = message_filters.ApproximateTimeSynchronizer([sub_car_cmd, sub_feedback], slop = 0.5, queue_size = 20)
 		ts.registerCallback(self.cb_control)	
 		self.sub_e_stop  = rospy.Subscriber("e_stop", Bool, self.cb_e_stop, queue_size = 20)
 
@@ -51,6 +51,7 @@ class WheelController(object):
 		self.e_stop = msg.data
 
 	def cb_control(self, car_cmd, feedback):
+		print "hello"
 		if(self.e_stop == True):
 			self.left_motor.setSpeed(0)
 			self.right_motor.setSpeed(0)
@@ -59,37 +60,37 @@ class WheelController(object):
 			rospy.loginfo("[%s] Emergency stop!" %(self.node_name))
 			rospy.sleep(0.1)
 		else:
-			desired_v_R = car_cmd.linear.x + WIDTH /2 * car_cmd.angular.z
-			desired_v_L = car_cmd.linear.x - WIDTH /2 * car_cmd.angular.z
+			desired_v_R = car_cmd.twist.linear.x + WIDTH /2 * car_cmd.twist.angular.z
+			desired_v_L = car_cmd.twist.linear.x - WIDTH /2 * car_cmd.twist.angular.z
 			error_R = desired_v_R - feedback.right
 			error_L = desired_v_L - feedback.left
 			self.error_sum_R += error_R
 			self.error_sum_L += error_L
-			pwm_R = error_R * self.kp_R + self.error_sum_R * self.ki_R
-			pwm_l = error_L * self.kp_L + self.error_sum_L * self.ki_L
+			pwm_R = int(error_R * self.kp_R + self.error_sum_R * self.ki_R)
+			pwm_L = int(error_L * self.kp_L + self.error_sum_L * self.ki_L)
 			if pwm_R > 0:
-				self.state_R = 1
+				self.state_r = 1
 				if pwm_R >= 255:
 					pwm_R = 255
 			if pwm_R < 0:
-				self.state_R = 2
+				self.state_r = 2
 				pwm_R = -pwm_R
 				if pwm_R >= 255:
 					pwm_R = 255
 			if pwm_L > 0:
-				self.state_L = 1
+				self.state_l = 1
 				if pwm_L >= 255:
 					pwm_L = 255
 			if pwm_L < 0:
-				self.state_L = 2
+				self.state_l = 2
 				pwm_L = -pwm_L
 				if pwm_L >= 255:
 					pwm_L = 255
 			
 			self.left_motor.setSpeed(pwm_L)
 			self.right_motor.setSpeed(pwm_R)
-			self.left_motor.run(self.state_L)
-			self.right_motor.run(self.state_R)
+			self.left_motor.run(self.state_l)
+			self.right_motor.run(self.state_r)
 			
 			rospy.sleep(0.1)
 	
